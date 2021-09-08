@@ -5,7 +5,7 @@ import time
 import os
 import math
 
-calculator_version = "Calculator v1.1"
+calculator_version = "Calculator v1.2"
 
 LARGE_FONT_STYLE = ("Arial", 28, "bold")
 SMALL_FONT_STYLE = ("Arial", 16)
@@ -22,6 +22,13 @@ path = os.path.abspath(os.getcwd())
 calculator_icon = path + "\Icons\Calculator.ico"
 about_icon = path + "\Icons\Info.ico"
 s_Calculator = path + "\Icons\Scientific Calculator.ico"
+splash_screen_Calculator_png = path + "\Icons\Splash_Screen.png"
+whats_new_icon = path + "\Icons\What's new.ico"
+
+v1_2_what_new_list = "- Splash Screen added\n- Standard Calculator position fixed" \
+                     "\n- Scientific Calculator position fixed\n- \"What's New\" tab added"
+v1_1_what_new_list = "- Options section added in menu\n- Scientific Calculator added on Options Section\n" \
+                     "- About tab's year will automatically change"
 
 
 def check_for_update():
@@ -55,10 +62,47 @@ def about():
     lbl2.place(x=10, y=40)
 
 
+def whats_new():
+    whats_new_window = tk.Tk()
+    whats_new_window.title("What's new?")
+    whats_new_window.wm_iconbitmap(about_icon)
+    whats_new_window.geometry("400x300")
+    whats_new_window.resizable(0, 0)
+    whats_new_window.iconbitmap(whats_new_icon)
+
+    lbl1 = Label(whats_new_window, text="What's new?", justify=LEFT, font=('Arial', 18, "bold"))
+
+    v1_2 = Label(whats_new_window, text="Version 1.2", justify=LEFT, font=("Arial", 14), relief=FLAT, state=ACTIVE)
+    v1_2_what_new_label = Label(whats_new_window, text=v1_2_what_new_list, justify=LEFT, font=("Arial", 11),
+                                relief=FLAT, state=ACTIVE)
+
+    v1_1 = Label(whats_new_window, text="Version 1.1", justify=LEFT, font=("Arial", 14), relief=FLAT, state=DISABLED)
+    v1_1_what_new_label = Label(whats_new_window, text=v1_1_what_new_list, justify=LEFT, font=("Arial", 11),
+                                relief=FLAT, state=DISABLED)
+
+    lbl1.place(x=10)
+    v1_2.place(x=10, y=40)
+    v1_2_what_new_label.place(x=10, y=70)
+
+    v1_1.place(x=10, y=150)
+    v1_1_what_new_label.place(x=10, y=180)
+
+
+splash_screen = Tk()
+splash_screen.geometry("320x478+500+120")
+
+img = PhotoImage(file=splash_screen_Calculator_png)
+img_label = Label(splash_screen, image=img)
+img_label.place(x=30, y=90)
+
+splash_screen.overrideredirect(True)
+splash_screen.after(1000, lambda: [splash_screen.destroy()])
+
+
 class Standard_Calculator:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.geometry("320x478")
+        self.window.geometry("320x478+500+120")
         self.window.resizable(0, 0)
         self.window.title("Calculator by Tahsin")
         self.window.iconbitmap(calculator_icon)
@@ -72,6 +116,8 @@ class Standard_Calculator:
         menubar1.add_cascade(label="Options", menu=self.fileMenu)
 
         self.fileMenu = Menu(menubar1, tearoff=0)
+        self.fileMenu.add_command(label="What's new?", command=whats_new)
+        self.fileMenu.add_separator()
         self.fileMenu.add_command(label="About", command=about)
         menubar1.add_cascade(label="More", menu=self.fileMenu)
 
@@ -224,7 +270,7 @@ class Standard_Calculator:
 
 def Scientific_Calculator():
     root = Tk()
-    root.geometry("650x400+300+300")
+    root.geometry("650x400+400+120")
     root.iconbitmap(s_Calculator)
     root.title("Scientific Calculator By Tahsin")
     root.resizable(0, 0)
@@ -694,6 +740,8 @@ def Scientific_Calculator():
     # menubar1.add_cascade(label="Update", menu=fileMenu)
 
     fileMenu = Menu(menubar1, tearoff=0)
+    fileMenu.add_command(label="What's new?", command=whats_new)
+    fileMenu.add_separator()
     fileMenu.add_command(label="About", command=about)
     menubar1.add_cascade(label="More", menu=fileMenu)
 
@@ -701,5 +749,6 @@ def Scientific_Calculator():
 
 
 if __name__ == "__main__":
+    splash_screen.mainloop()
     calc = Standard_Calculator()
     calc.run()
